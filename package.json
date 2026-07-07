@@ -2,7 +2,7 @@
   "name": "autoh-han-yeog",
   "displayName": "Autoh Han Yeog",
   "description": "Correct Korean typed with the English keyboard inside code strings and comments.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "publisher": "nelo07",
   "license": "MIT",

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1
+
+- Rewrote the Marketplace README in Korean with user-focused usage instructions.
+
 ## 0.1.0
 
 - Added a lightweight Hangul/English keyboard correction model.
