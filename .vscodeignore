@@ -1,0 +1,13 @@
+.git/**
+.github/**
+.vscode/**
+.gitignore
+data/raw/**
+node_modules/**
+src/**
+dist/*.test.js
+dist/cli.js
+dist/extension.js
+dist/tools/**
+*.vsix
+tsconfig.json

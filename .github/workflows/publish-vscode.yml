@@ -1,0 +1,29 @@
+name: Publish VS Code Extension
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build
+
+      - run: npm run build:extension
+
+      - run: npm test
+
+      - name: Publish to Visual Studio Marketplace
+        run: npx vsce publish --pat "$env:VSCE_PAT"
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}

@@ -1,0 +1,177 @@
+{
+  "name": "autoh-han-yeog",
+  "displayName": "Autoh Han Yeog",
+  "description": "Correct Korean typed with the English keyboard inside code strings and comments.",
+  "version": "0.1.0",
+  "type": "module",
+  "publisher": "nelo07",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nelow0070-ui/autoh-han-yeog.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nelow0070-ui/autoh-han-yeog/issues"
+  },
+  "homepage": "https://github.com/nelow0070-ui/autoh-han-yeog#readme",
+  "keywords": [
+    "hangul",
+    "korean",
+    "keyboard",
+    "ime",
+    "autocorrect",
+    "vscode"
+  ],
+  "galleryBanner": {
+    "color": "#111827",
+    "theme": "dark"
+  },
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./dist/extension.cjs",
+  "activationEvents": [
+    "onStartupFinished",
+    "onCommand:autohHanYeog.correctSelection",
+    "onCommand:autohHanYeog.correctDocument",
+    "onCommand:autohHanYeog.toggleAutoCorrect",
+    "onCommand:autohHanYeog.revertLastCorrection",
+    "onCommand:autohHanYeog.ignoreToken",
+    "onCommand:autohHanYeog.alwaysCorrectToken",
+    "onCommand:autohHanYeog.showDebugInfo",
+    "onCommand:autohHanYeog.clearPersonalRules"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "autohHanYeog.correctSelection",
+        "title": "AutohHanYeog: Correct Selection"
+      },
+      {
+        "command": "autohHanYeog.correctDocument",
+        "title": "AutohHanYeog: Correct Current Document"
+      },
+      {
+        "command": "autohHanYeog.toggleAutoCorrect",
+        "title": "AutohHanYeog: Toggle Auto Correction"
+      },
+      {
+        "command": "autohHanYeog.revertLastCorrection",
+        "title": "AutohHanYeog: Revert Last Automatic Correction"
+      },
+      {
+        "command": "autohHanYeog.ignoreToken",
+        "title": "AutohHanYeog: Ignore Token"
+      },
+      {
+        "command": "autohHanYeog.alwaysCorrectToken",
+        "title": "AutohHanYeog: Always Correct Token"
+      },
+      {
+        "command": "autohHanYeog.showDebugInfo",
+        "title": "AutohHanYeog: Show Token Debug Info"
+      },
+      {
+        "command": "autohHanYeog.clearPersonalRules",
+        "title": "AutohHanYeog: Clear Personal Rules"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "autohHanYeog.correctSelection",
+          "when": "editorHasSelection",
+          "group": "1_modification@1"
+        },
+        {
+          "command": "autohHanYeog.correctDocument",
+          "group": "1_modification@2"
+        },
+        {
+          "command": "autohHanYeog.toggleAutoCorrect",
+          "group": "navigation@50"
+        },
+        {
+          "command": "autohHanYeog.revertLastCorrection",
+          "group": "navigation@51"
+        },
+        {
+          "command": "autohHanYeog.ignoreToken",
+          "group": "navigation@52"
+        },
+        {
+          "command": "autohHanYeog.alwaysCorrectToken",
+          "group": "navigation@53"
+        },
+        {
+          "command": "autohHanYeog.showDebugInfo",
+          "group": "navigation@54"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "AutohHanYeog",
+      "properties": {
+        "autohHanYeog.autoCorrect": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically correct the previous token after spaces, newlines, and punctuation."
+        },
+        "autohHanYeog.correctStrings": {
+          "type": "boolean",
+          "default": true,
+          "description": "Correct Korean keyboard mistakes inside strings."
+        },
+        "autohHanYeog.correctComments": {
+          "type": "boolean",
+          "default": true,
+          "description": "Correct Korean keyboard mistakes inside comments."
+        },
+        "autohHanYeog.minConfidence": {
+          "type": "number",
+          "default": 1.2,
+          "minimum": 0,
+          "description": "Minimum model confidence required for automatic and command-based correction."
+        },
+        "autohHanYeog.triggerCharacters": {
+          "type": "string",
+          "default": " \t\r\n.,;:!?)]}\"'`",
+          "description": "Characters that trigger automatic correction of the previous token."
+        },
+        "autohHanYeog.showCorrectionMessage": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show a small message after automatic correction with Revert and Ignore actions."
+        },
+        "autohHanYeog.languageOverrides": {
+          "type": "object",
+          "default": {},
+          "description": "Per-language overrides keyed by VS Code languageId or detected profile name. Example: {\"json\":{\"autoCorrect\":false},\"typescript\":{\"correctComments\":false}}"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "build:extension": "esbuild src/extension.ts --bundle --platform=node --format=cjs --target=node18 --external:vscode --outfile=dist/extension.cjs",
+    "data:download": "tsx src/tools/download-dictionaries.ts",
+    "train": "tsx src/tools/train-model.ts",
+    "package:vscode": "npm run build && npm run build:extension && vsce package",
+    "verify": "npm run build && npm run build:extension && npm test && npm run package:vscode",
+    "start": "node dist/cli.js",
+    "dev": "tsx src/cli.ts",
+    "test": "node --test ./dist/corrector.test.js ./dist/keyboard.test.js"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/vscode": "^1.90.0",
+    "@vscode/vsce": "^3.9.2",
+    "esbuild": "^0.28.1",
+    "tsx": "^4.20.0",
+    "typescript": "^5.8.0",
+    "word-list": "^4.1.0"
+  }
+}
